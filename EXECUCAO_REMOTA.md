@@ -8,6 +8,12 @@ Este documento contém todos os comandos para executar o script **HardwareReadin
 
 **Script Raw**: https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1
 
+## 📊 Compartilhe seus Resultados
+
+**[👉 Formulário de Envio de Resultados](https://joseanoxp.notion.site/2a9fb6ce69a2804daf82ff93572c8b23?pvs=105)**
+
+Após executar o script, você pode enviar seus resultados de forma anônima para ajudar a melhorar o projeto!
+
 ---
 
 ## ⚡ Comandos de Execução Rápida

@@ -11,6 +11,21 @@ Script PowerShell melhorado para verificar se o hardware atende aos requisitos d
 irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1 | iex
 ```
 
+**📊 Compartilhe seus Resultados**:
+
+Ajude a melhorar este projeto! Envie os resultados da verificação do seu hardware:
+
+👉 **[Formulário de Envio de Resultados](https://joseanoxp.notion.site/2a9fb6ce69a2804daf82ff93572c8b23?pvs=105)**
+
+Seus dados ajudam a:
+- Identificar padrões de compatibilidade
+- Melhorar a detecção de hardware
+- Criar estatísticas sobre dispositivos compatíveis com Windows 11
+
+*Os dados são anônimos e usados apenas para fins estatísticos.*
+
+---
+
 ## Novidades da Versão 2.0
 
 ### Verificações Adicionadas
