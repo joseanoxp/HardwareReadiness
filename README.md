@@ -81,14 +81,20 @@ irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareR
 Ideal para execução rápida em múltiplas máquinas sem download prévio:
 
 ### Executar direto do GitHub
-```powershell
-# Baixar e executar (saída JSON)
-irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1 | iex
 
-# Baixar e executar com saída Console
-$script = irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1
-$scriptBlock = [scriptblock]::Create("$script -Format Console")
-& $scriptBlock
+**Formato JSON (padrão)**:
+```powershell
+irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1 | iex
+```
+
+**Formato Console (colorido)**:
+```powershell
+iex "& {$(irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1)} -Format Console"
+```
+
+**Formato Console com Verbose**:
+```powershell
+iex "& {$(irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1)} -Format Console -VerboseOutput"
 ```
 
 ### Executar com parâmetros personalizados

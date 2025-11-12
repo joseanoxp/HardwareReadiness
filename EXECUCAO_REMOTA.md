@@ -27,12 +27,10 @@ irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareR
 ### 2️⃣ Execução com Saída Console (Colorida)
 
 ```powershell
-$script = irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1
-$scriptBlock = [scriptblock]::Create("$script -Format Console")
-& $scriptBlock
+iex "& {$(irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1)} -Format Console"
 ```
 
-**O que faz**: Baixa o script e executa com saída formatada e colorida.
+**O que faz**: Baixa e executa com saída formatada e colorida em uma única linha.
 
 **Uso**: Ideal para verificação visual direta.
 
@@ -41,12 +39,10 @@ $scriptBlock = [scriptblock]::Create("$script -Format Console")
 ### 3️⃣ Execução com Modo Verbose
 
 ```powershell
-$script = irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1
-$scriptBlock = [scriptblock]::Create("$script -Format Console -VerboseOutput")
-& $scriptBlock
+iex "& {$(irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1)} -Format Console -VerboseOutput"
 ```
 
-**O que faz**: Executa com informações detalhadas de debug.
+**O que faz**: Executa com informações detalhadas de debug em uma única linha.
 
 **Uso**: Troubleshooting e análise detalhada.
 
