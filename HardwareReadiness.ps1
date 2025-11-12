@@ -640,5 +640,5 @@ else {
 
 #EndRegion
 
-# Código de saída para scripts de automação
-exit $returnCode
+# Nota: returnCode está disponível no JSON para automação
+# Não usar 'exit' para não fechar terminal quando executado via pipe (irm | iex)
