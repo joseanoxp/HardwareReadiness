@@ -1,6 +1,15 @@
 # Windows 11 Hardware Readiness Checker
 
+[![GitHub](https://img.shields.io/badge/GitHub-joseanoxp%2FHardwareReadiness-blue?logo=github)](https://github.com/joseanoxp/HardwareReadiness)
+[![PowerShell](https://img.shields.io/badge/PowerShell-5.1%2B%20%7C%207%2B-blue?logo=powershell)](https://github.com/PowerShell/PowerShell)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 Script PowerShell melhorado para verificar se o hardware atende aos requisitos do Windows 11.
+
+**🚀 Execução Rápida**:
+```powershell
+irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1 | iex
+```
 
 ## Novidades da Versão 2.0
 
@@ -74,10 +83,10 @@ Ideal para execução rápida em múltiplas máquinas sem download prévio:
 ### Executar direto do GitHub
 ```powershell
 # Baixar e executar (saída JSON)
-irm https://raw.githubusercontent.com/[seu-usuario]/HardwareReadiness/main/HardwareReadiness.ps1 | iex
+irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1 | iex
 
 # Baixar e executar com saída Console
-$script = irm https://raw.githubusercontent.com/[seu-usuario]/HardwareReadiness/main/HardwareReadiness.ps1
+$script = irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1
 $scriptBlock = [scriptblock]::Create("$script -Format Console")
 & $scriptBlock
 ```
@@ -89,11 +98,13 @@ $tempFile = New-TemporaryFile
 Rename-Item -Path $tempFile -NewName "$($tempFile.BaseName).ps1" -PassThru | Out-Null
 $scriptPath = "$($tempFile.DirectoryName)\$($tempFile.BaseName).ps1"
 
-irm https://raw.githubusercontent.com/[seu-usuario]/HardwareReadiness/main/HardwareReadiness.ps1 -OutFile $scriptPath
+irm https://raw.githubusercontent.com/joseanoxp/HardwareReadiness/main/HardwareReadiness.ps1 -OutFile $scriptPath
 & $scriptPath -Format Console -VerboseOutput
 
 Remove-Item $scriptPath
 ```
+
+**📖 Documentação completa**: [EXECUCAO_REMOTA.md](EXECUCAO_REMOTA.md)
 
 ## Deploy Enterprise (Intune/SCCM)
 
