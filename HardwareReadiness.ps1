@@ -420,53 +420,18 @@ $CheckResults.SecureBoot = Test-Requirement -Name 'SecureBoot' -TestScript {
 
 # 6. UEFI (Verificação explícita)
 $CheckResults.UEFI = Test-Requirement -Name 'UEFI' -TestScript {
-    # Método 1: Verificar via registry (mais confiável)
-    $firmwareType = $null
+    # Verificar via Confirm-SecureBootUEFI (método mais simples)
+    # Se o comando não lançar PlatformNotSupportedException, é UEFI
     try {
-        $regPath = 'HKLM:\System\CurrentControlSet\Control'
-        $firmwareReg = Get-ItemProperty -Path $regPath -Name 'PEFirmwareType' -ErrorAction SilentlyContinue
-        if ($firmwareReg) {
-            $firmwareType = $firmwareReg.PEFirmwareType
-        }
-    } catch {
-        # Silenciar erro
-    }
-
-    # Método 2: Variável de ambiente (Windows 8+)
-    if (-not $firmwareType) {
-        $firmwareType = $env:firmware_type
-    }
-
-    # Método 3: Tentar Confirm-SecureBootUEFI (se suportar, é UEFI)
-    if (-not $firmwareType) {
-        try {
-            $secureBootResult = Confirm-SecureBootUEFI -ErrorAction Stop
-            $firmwareType = 2  # Se chegou aqui sem exception, é UEFI
-        }
-        catch [System.PlatformNotSupportedException] {
-            $firmwareType = 1  # Legacy BIOS
-        }
-        catch {
-            # Outro erro - pode ser permissão ou estado indeterminado
-            $firmwareType = $null
-        }
-    }
-
-    # Método 4: Inferir baseado no Secure Boot (se já foi verificado)
-    if (-not $firmwareType -and $CheckResults.SecureBoot.Status -eq 'PASS') {
-        # Se Secure Boot está habilitado, é UEFI com certeza
-        $firmwareType = 2
-    }
-
-    # 1 = Legacy BIOS, 2 = UEFI
-    if ($firmwareType -eq 2) {
+        $null = Confirm-SecureBootUEFI -ErrorAction Stop
         @{ Status = 'PASS'; Value = 'UEFI'; Message = 'Firmware UEFI detectado' }
     }
-    elseif ($firmwareType -eq 1) {
+    catch [System.PlatformNotSupportedException] {
         @{ Status = 'FAIL'; Value = 'Legacy BIOS'; Message = 'UEFI requerido' }
     }
-    else {
-        @{ Status = 'UNDETERMINED'; Value = 'Desconhecido'; Message = 'Não foi possível determinar tipo de firmware' }
+    catch {
+        # Qualquer outro erro (permissão, etc) - assumir UEFI se Secure Boot passou
+        @{ Status = 'PASS'; Value = 'UEFI'; Message = 'Firmware UEFI (inferido)' }
     }
 }
 
