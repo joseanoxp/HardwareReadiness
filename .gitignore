@@ -1,0 +1,37 @@
+# PowerShell
+*.ps1xml
+*.psd1
+*.psm1~
+*.dll-Help.xml
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+~$*
+
+# VS Code
+.vscode/
+.vs/
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Test results
+TestResults/
+*.trx
+
+# Backup files
+*.bak
+*.backup
