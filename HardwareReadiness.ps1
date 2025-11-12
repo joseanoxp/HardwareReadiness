@@ -420,25 +420,42 @@ $CheckResults.SecureBoot = Test-Requirement -Name 'SecureBoot' -TestScript {
 
 # 6. UEFI (Verificação explícita)
 $CheckResults.UEFI = Test-Requirement -Name 'UEFI' -TestScript {
-    # Método 1: Variável de ambiente
-    $firmwareType = $env:firmware_type
-
-    # Método 2: Verificar via registry
-    if (-not $firmwareType) {
+    # Método 1: Verificar via registry (mais confiável)
+    $firmwareType = $null
+    try {
         $regPath = 'HKLM:\System\CurrentControlSet\Control'
         $firmwareReg = Get-ItemProperty -Path $regPath -Name 'PEFirmwareType' -ErrorAction SilentlyContinue
-        $firmwareType = $firmwareReg.PEFirmwareType
+        if ($firmwareReg) {
+            $firmwareType = $firmwareReg.PEFirmwareType
+        }
+    } catch {
+        # Silenciar erro
+    }
+
+    # Método 2: Variável de ambiente (Windows 8+)
+    if (-not $firmwareType) {
+        $firmwareType = $env:firmware_type
     }
 
     # Método 3: Tentar Confirm-SecureBootUEFI (se suportar, é UEFI)
     if (-not $firmwareType) {
         try {
-            $null = Confirm-SecureBootUEFI -ErrorAction Stop
-            $firmwareType = 2  # UEFI
+            $secureBootResult = Confirm-SecureBootUEFI -ErrorAction Stop
+            $firmwareType = 2  # Se chegou aqui sem exception, é UEFI
         }
         catch [System.PlatformNotSupportedException] {
             $firmwareType = 1  # Legacy BIOS
         }
+        catch {
+            # Outro erro - pode ser permissão ou estado indeterminado
+            $firmwareType = $null
+        }
+    }
+
+    # Método 4: Inferir baseado no Secure Boot (se já foi verificado)
+    if (-not $firmwareType -and $CheckResults.SecureBoot.Status -eq 'PASS') {
+        # Se Secure Boot está habilitado, é UEFI com certeza
+        $firmwareType = 2
     }
 
     # 1 = Legacy BIOS, 2 = UEFI
@@ -536,12 +553,17 @@ $CheckResults.WindowsVersion = Test-Requirement -Name 'WindowsVersion' -TestScri
     $osInfo = Get-CimInstance -ClassName Win32_OperatingSystem
     $currentBuild = [int]$osInfo.BuildNumber
 
-    # Windows 10 2004 = Build 19041
+    # Windows 10 2004 = Build 19041, Windows 11 = Build 22000+
     if ($currentBuild -ge $Requirements.MinWindowsBuild) {
-        $versionName = switch ($currentBuild) {
-            { $_ -ge 22000 } { "Windows 11" }
-            { $_ -ge 19041 } { "Windows 10 2004+" }
-            default { "Windows 10" }
+        # Usar if/elseif para evitar múltiplas matches
+        if ($currentBuild -ge 22000) {
+            $versionName = "Windows 11"
+        }
+        elseif ($currentBuild -ge 19041) {
+            $versionName = "Windows 10 2004+"
+        }
+        else {
+            $versionName = "Windows 10"
         }
 
         @{
